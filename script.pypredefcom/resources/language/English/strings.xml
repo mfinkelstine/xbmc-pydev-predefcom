@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- plugin title -->
+    <string id="30000">PyDocs Printer</string>
+    <!-- language author (translators put your name here) -->
+    <string id="30002">nuka1195</string>
+
+    <!-- category separators -->
+    <string id="30050">General</string>
+    <string id="30051"></string>
+    <string id="30052"></string>
+    <string id="30053"></string>
+    <string id="30054"></string>
+    <string id="30055"></string>
+    <string id="30056"></string>
+
+    <!-- General -->
+    <string id="30100">Preferences</string>
+    <!-- settings labels & options -->
+    <string id="30110">Save help docs to</string>
+
+    <!-- universal strings -->
+    <!-- messages -->
+    <string id="30711">Saving: %s</string>
+    <string id="30712">To: %s</string>
+</strings>
