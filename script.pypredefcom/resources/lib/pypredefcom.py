@@ -20,6 +20,9 @@
 '''
 Created on Jul 31, 2010
 
+The main purpose of this module is to create a PyDev Predefined Completion from
+another module using introspection and write it out to a file.
+
 @author: jim
 '''
 
@@ -43,6 +46,7 @@ def visiblename(name, all=None):
         return not name.startswith('_')
     
 def ensuredir(dir):
+    """ This method simply ensures that the directory path provided exists and creates it otherwise. """
     if not os.path.exists(dir):
         os.makedirs(dir)
 
@@ -75,20 +79,16 @@ def displayMethod(f, method, indent = ""):
     f.write (indent + "def " + name)
     
     try:
-#    if inspect.isfunction(method):
         args, varargs, varkw, defaults = inspect.getargspec(method)
         argspec = inspect.formatargspec(
             args, varargs, varkw, defaults, formatvalue=myformatvalue)
         if name == '<lambda>':
             argspec = argspec[1:-1] # remove parentheses
-#    else:
-#        argspec = '(...)'
     except TypeError:
         argspec = '(*args)'
         
     f.write (argspec + ":\n")
 
-    
     displayDocLine(f,method,indent + oneindent)
     
 def displayClass(f, clazz, indent = ""):
@@ -101,6 +101,8 @@ def displayClass(f, clazz, indent = ""):
         
     for key, value in parts:
         if visiblename(key,all):
+# Apparently all classes contain other standard classes (and themselves as members?). If I run across a case
+#  where this is needed then I will need to add a filter here.
 #            if inspect.isclass(value):
 #                displayClass(f,value, indent + oneindent)
             if lookslikeamethod(value):
@@ -110,25 +112,31 @@ def displayClass(f, clazz, indent = ""):
     f.write("\n\n")
 
 def otherpart(f, key, value, indent = ""):
+    """ If I don't know how to handle a 'part' then I call this method which
+    currently just logs the details of the part to stdout for later evaluation """
 #    f.write( indent +  "other part:" + key + ", " + str(value) + " --- of type --->(" + str(type(value)) + ")\n")
     print( indent +  "other part:" + key + ", " + str(value) + " --- of type --->(" + str(type(value)) + ")\n")
     print( indent + oneindent + str(inspect.getmembers(value)))
     return
 
-def lookslikeamethod(object):
-    if inspect.isfunction(object) or inspect.ismethod(object) or inspect.isbuiltin(object) or inspect.ismethoddescriptor(object):
+def lookslikeamethod(part):
+    """ Does the passed part appear to be methodlike? """
+    if inspect.isfunction(part) or inspect.ismethod(part) or inspect.isbuiltin(part) or inspect.ismethoddescriptor(part):
         return True
     return False
 
-def lookslikeattribute(object):
-    if type(object) is int or type(object) is str or type(object) is bool:
+def lookslikeattribute(part):
+    """ Does the passed part look like an attribute of a class or modules? """
+    if type(part) is int or type(part) is str or type(part) is bool:
         return True
     
-def displayAttribute(f, key, value, indent = ""):
-    mytype = re.sub("^<type '", "", repr(type(value)), 1)
+def displayAttribute(f, attributename, attributevalue, indent = ""):
+    # TODO: This seems to be a bit of a hack. There ought to be a better way to handle
+    #  retrieving a string that contains the type (and only the type) of the attribute.
+    mytype = re.sub("^<type '", "", repr(type(attributevalue)), 1)
     mytype = re.sub("'>$", "", mytype, 1)
     
-    f.write( indent + key + " = " +  mytype + "\n")
+    f.write( indent + attributename + " = " +  mytype + "\n")
     return
 
 def pypredefmodule(f, module):
