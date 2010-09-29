@@ -85,7 +85,32 @@ def displayMethod(f, method, indent = ""):
         if name == '<lambda>':
             argspec = argspec[1:-1] # remove parentheses
     except TypeError:
-        argspec = '(*args)'
+# None of this works because the docs are too inconsistent.
+#        # many of the xbmc document strings contain an signature for the
+#        # function. It may be possible to pull the signature from the document
+#        # line but it's not necessarily reliable as it's more than likely that
+#        # someone can update the signature but not go back and update the documentation.
+#        # Nevertheless it's probably better to use it if it can be parsed out of
+#        # the string than to simply provide varargs.
+#        
+#        # OK - we might as well make the attempt
+#        
+#        # TODO: There MUST be a better way to do this. How can I get the argspec
+#        # from a built in/native Python method?
+#        try:
+#            docline = method.__doc__
+#            argspec = re.search(name + "\( *.*\)", docline)
+#            if argspec is None:
+#                argspec = '(*args)'
+#            else:
+#                argspec = argspec.group(0)
+#                # now get rid of square brackets that denote optional attributes
+#                argspec = re.sub("\[", "", argspec, 999)
+#                argspec = re.sub("\]", "", argspec, 999)
+#                
+#        except AttributeError:
+#            argspec = '(*args)'
+            argspec = '(*args)'
         
     f.write (argspec + ":\n")
 
