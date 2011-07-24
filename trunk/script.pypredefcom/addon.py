@@ -67,7 +67,7 @@ if ( __name__ == "__main__" ):
         # set the doc_path setting incase the browse dialog was used
         Addon.setSetting( "doc_path", doc_path )
         # modules
-        modules = [ "xbmc", "xbmcgui", "xbmcplugin", "xbmcaddon" ]
+        modules = [ "xbmc", "xbmcgui", "xbmcplugin", "xbmcaddon", "xbmcvfs" ]
         # enumerate thru and print our help docs
         for count, module in enumerate( modules ):
             # set correct path
