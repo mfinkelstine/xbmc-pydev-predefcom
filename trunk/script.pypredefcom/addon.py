@@ -22,6 +22,7 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
+import xbmcvfs
 import resources.lib.pypredefcom as pypredefcomp
 
 #REMOTE_DBG = False
